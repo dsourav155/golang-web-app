@@ -4,10 +4,11 @@ WORKDIR /app
 
 COPY go.mod .
 
+RUN export GOVCS=false
 RUN go mod download
 
 COPY . .
-
+RUN export GOVCS=false
 RUN go build  -o main -buildvcs=false
 
 # final stage - Distroless image
