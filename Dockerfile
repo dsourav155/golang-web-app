@@ -11,7 +11,7 @@ COPY . .
 RUN go build -buildvcs=false -o main .
 
 # Explicitly set the target architecture
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -buildvcs=false -o main .
 
 # final stage - Distroless image
 
