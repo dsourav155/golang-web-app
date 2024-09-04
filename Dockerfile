@@ -1,4 +1,4 @@
-FROM golang:1.22 as base
+FROM golang:1.22 as builder
 
 WORKDIR /app
 
@@ -10,15 +10,20 @@ COPY . .
 
 RUN go build -o main .
 
+# Explicitly set the target architecture
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
+
 # final stage - Distroless image
 
-FROM gcr.io/distroless/base
+FROM gcr.io/distroless/static-debian12:nonroot
 
-COPY --from=base /app/main .
+WORKDIR /app
 
-COPY --from=base /app/static ./static
+COPY --from=builder /app/main .
+
+COPY --from=builder /app/static ./static
 
 EXPOSE 8080
 
-CMD [ "./main" ]
+CMD [ "/app/main" ]
 

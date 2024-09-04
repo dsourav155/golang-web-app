@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: golang-web-app
-        image: dsourav155/golang-web-app:v1
+        image: dsourav155/golang-web-app:v2
         ports:
         - containerPort: 8080
