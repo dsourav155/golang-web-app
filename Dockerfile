@@ -1,16 +1,17 @@
-FROM golang:1.21.10 AS builder
+FROM golang:1.21.10 as builder
 
 WORKDIR /app
 
 COPY go.mod .
 
-RUN export GOVCS=false
 RUN go mod download
 
 COPY . .
 
-RUN export GOVCS=false
-RUN go build -o main .
+RUN go build -buildvcs=false -o main .
+
+# Explicitly set the target architecture
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -buildvcs=false -o main .
 
 # final stage - Distroless image
 
@@ -19,6 +20,7 @@ FROM gcr.io/distroless/static-debian12:nonroot
 WORKDIR /app
 
 COPY --from=builder /app/main .
+
 COPY --from=builder /app/static ./static
 
 EXPOSE 8080
