@@ -10,9 +10,6 @@ COPY . .
 
 RUN go build  -o main -buildvcs=false
 
-# Explicitly set the target architecture
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main -buildvcs=false
-
 # final stage - Distroless image
 
 FROM gcr.io/distroless/static-debian12:nonroot
