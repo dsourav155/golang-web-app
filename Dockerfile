@@ -1,4 +1,4 @@
-FROM golang:1.21 as builder
+FROM golang:1.21.10 as builder
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ COPY . .
 RUN go build -buildvcs=false -o main .
 
 # Explicitly set the target architecture
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -buildvcs=false -o main .
 
 # final stage - Distroless image
 
